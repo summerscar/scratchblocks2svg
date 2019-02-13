@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {
+                width: 100px;
+            }
+            h1 {
+                text-align: center;
+            }
+            .button-secondary {
+                background: white; /* this is a light blue */
+                color: black;
+                padding: 5px 10px;
+                outline: none;
+                border-radius: 4px;
+                border: 1px solid #dcdfe6;
+                cursor: pointer;
+            }
+            .button-secondary:hover {
+                background: #fff;
+                color: #409EFF;
+                border: 1px solid #409EFF;
+            }
+            .buttongroup {
+                display: flex;
+                justify-content: space-around;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="buttongroup">
+            <button type="button" class="button-secondary" id="export">导出svg</button>
+        </div>
+    </body>
+    <script type="text/javascript" src="./main.js"></script>
+</html>
