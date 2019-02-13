@@ -22,6 +22,9 @@ chrome.extension.onMessage.addListener(
 .blocklyNonEditableText>text, .blocklyEditableText>text {
     fill: #575E75;
 }
+.blocklyDropdownText {
+    fill: #fff !important;
+}
 `
 
         let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
