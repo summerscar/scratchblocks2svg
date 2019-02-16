@@ -3,7 +3,7 @@
         <meta charset="UTF-8">
         <style>
             body {
-                width: 100px;
+                width: 180px;
             }
             h1 {
                 text-align: center;
@@ -16,6 +16,7 @@
                 border-radius: 4px;
                 border: 1px solid #dcdfe6;
                 cursor: pointer;
+                margin: 5px 0;
             }
             .button-secondary:hover {
                 background: #fff;
@@ -25,13 +26,15 @@
             .buttongroup {
                 display: flex;
                 justify-content: space-around;
+                flex-wrap: wrap;
             }
         </style>
     </head>
 
     <body>
         <div class="buttongroup">
-            <button type="button" class="button-secondary" id="export">导出svg</button>
+            <button type="button" class="button-secondary" id="export1">export svg(selected)</button>
+            <button type="button" class="button-secondary" id="export2">export svg(all)</button>
         </div>
     </body>
     <script type="text/javascript" src="./main.js"></script>

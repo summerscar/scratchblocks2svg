@@ -1,5 +1,3 @@
-console.log('注入成功')
-
 chrome.extension.onMessage.addListener(
     function(request, sender, sendMessage) {
         console.log(request)
@@ -26,16 +24,33 @@ chrome.extension.onMessage.addListener(
     fill: #fff !important;
 }
 `
+        if (request.command === 'export1') {
+            let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
+            if (!svgchild) alert('先点击需要导出的block')
+            svgchild = svgchild.cloneNode(true)
+            svgchild.setAttribute('transform', 'translate(0,0)')
+            svg.append(style)
+            svg.append(svgchild)
 
-        let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
-        if (!svgchild) alert('先点击需要导出的block')
-        svgchild = svgchild.cloneNode(true)
-        svgchild.setAttribute('transform', 'translate(0,0)')
-        svg.append(style)
-        svg.append(svgchild)
-        // svg.innerHTML = svg.innerHTML.replace('&nbsp;', ' ')
-        console.log(svg)
-
+        } else {
+            let svgchild = document.querySelector('svg.blocklySvg g.blocklyBlockCanvas')
+            svgchild = svgchild.cloneNode(true)
+            svgchild.setAttribute('transform', 'translate(0,0)')
+            svg.append(style)
+            svg.append(svgchild)
+        }
+        // 处理 nbsp 空格
+        let texts = Array.from(svg.getElementsByTagName('text'))
+        texts.forEach(text => {
+            text.innerHTML = text.innerHTML.replace(/&nbsp;/, ' ')
+        })
+        // 处理image 路径
+        let images = Array.from(svg.getElementsByTagName('image'))
+        images.forEach(item => {
+            if (item.getAttribute('xlink:href').indexOf('./static/') === 0) {
+                item.setAttribute('xlink:href', 'https://scratch3.codelab.club/' + item.getAttribute('xlink:href').slice(2))
+            }
+        })
         let tmp = document.createElement('div')
         tmp.appendChild(svg);
 
