@@ -52,6 +52,9 @@ chrome.extension.onMessage.addListener(
             if (item.getAttribute('xlink:href').indexOf('/static/') === 0) {
                 item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(1))
             }
+			else if if (item.getAttribute('xlink:href').indexOf('./static/') === 0) {
+                item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(2))
+            }
         })
         let tmp = document.createElement('div')
         tmp.appendChild(svg);
