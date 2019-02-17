@@ -45,15 +45,14 @@ chrome.extension.onMessage.addListener(
             text.innerHTML = text.innerHTML.replace(/&nbsp;/, ' ')
         })
         // 处理image 路径
-		let scratchURL = 'https://scratch3.codelab.club/'
-		//let scratchURL = 'https://scratch.mit.edu/'
+		let scratchURL = window.location.origin
+		//let scratchURL = 'https://scratch3.codelab.club/'
         let images = Array.from(svg.getElementsByTagName('image'))
         images.forEach(item => {
             if (item.getAttribute('xlink:href').indexOf('/static/') === 0) {
+                item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(0))
+            } else if (item.getAttribute('xlink:href').indexOf('./static/') === 0) {
                 item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(1))
-            }
-			else if if (item.getAttribute('xlink:href').indexOf('./static/') === 0) {
-                item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(2))
             }
         })
         let tmp = document.createElement('div')
