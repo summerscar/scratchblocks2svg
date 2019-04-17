@@ -6,7 +6,6 @@
         "128": "icon.png"
     },
     "permissions": [
-        "storage",
         "activeTab"
     ],
     "background": {

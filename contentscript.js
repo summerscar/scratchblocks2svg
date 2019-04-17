@@ -26,16 +26,27 @@ chrome.extension.onMessage.addListener(
 `
         if (request.command === 'export1') {
             let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
-            if (!svgchild) alert('先点击需要导出的block')
+            if (!svgchild) alert('click the blocks you need export')
             svgchild = svgchild.cloneNode(true)
-            svgchild.setAttribute('transform', 'translate(0,0)')
+            let dataShapes = svgchild.getAttribute('data-shapes')
+            svgchild.setAttribute('transform', `translate(0,${dataShapes === 'hat' ? '18' : '0'})`)
             svg.append(style)
             svg.append(svgchild)
 
         } else {
             let svgchild = document.querySelector('svg.blocklySvg g.blocklyBlockCanvas')
             svgchild = svgchild.cloneNode(true)
-            svgchild.setAttribute('transform', 'translate(0,0)')
+
+            let xArr = []
+            let yArr = []
+            svgchild.childNodes.forEach(g => {
+                let x = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[1] || 0
+                let y = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[2] || 0
+                xArr.push(x)
+                yArr.push(y)
+            })
+
+            svgchild.setAttribute('transform', `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18})`)
             svg.append(style)
             svg.append(svgchild)
         }
