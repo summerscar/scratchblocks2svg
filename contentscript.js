@@ -34,7 +34,7 @@ chrome.extension.onMessage.addListener(
 `
         if (request.command === 'export1') {
             let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
-            if (!svgchild) alert('click the blocks you need export')
+            if (!svgchild) alert('Click on the blocks you want to export!')
             svgchild = svgchild.cloneNode(true)
             let dataShapes = svgchild.getAttribute('data-shapes')
             svgchild.setAttribute('transform', `translate(0,${dataShapes === 'hat' ? '18' : '0'})`)
