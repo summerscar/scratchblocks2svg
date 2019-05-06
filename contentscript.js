@@ -1,8 +1,8 @@
 chrome.extension.onMessage.addListener(
     function(request, sender, sendMessage) {
-        console.log(request)
-	
-	// blocks-media as base64 for svg inline image	
+    console.log(request)
+
+	// blocks-media as base64 for svg inline image
 	let blocksMedia = new Map()
 	blocksMedia.set("repeat.svg","data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9InJlcGVhdCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDI0IDI0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNCAyNDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiNDRjhCMTc7fQoJLnN0MXtmaWxsOiNGRkZGRkY7fQo8L3N0eWxlPgo8dGl0bGU+cmVwZWF0PC90aXRsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTIzLjMsMTFjLTAuMywwLjYtMC45LDEtMS41LDFoLTEuNmMtMC4xLDEuMy0wLjUsMi41LTEuMSwzLjZjLTAuOSwxLjctMi4zLDMuMi00LjEsNC4xCgljLTEuNywwLjktMy42LDEuMi01LjUsMC45Yy0xLjgtMC4zLTMuNS0xLjEtNC45LTIuM2MtMC43LTAuNy0wLjctMS45LDAtMi42YzAuNi0wLjYsMS42LTAuNywyLjMtMC4ySDdjMC45LDAuNiwxLjksMC45LDIuOSwwLjkKCXMxLjktMC4zLDIuNy0wLjljMS4xLTAuOCwxLjgtMi4xLDEuOC0zLjVoLTEuNWMtMC45LDAtMS43LTAuNy0xLjctMS43YzAtMC40LDAuMi0wLjksMC41LTEuMmw0LjQtNC40YzAuNy0wLjYsMS43LTAuNiwyLjQsMEwyMyw5LjIKCUMyMy41LDkuNywyMy42LDEwLjQsMjMuMywxMXoiLz4KPHBhdGggY2xhc3M9InN0MSIgZD0iTTIxLjgsMTFoLTIuNmMwLDEuNS0wLjMsMi45LTEsNC4yYy0wLjgsMS42LTIuMSwyLjgtMy43LDMuNmMtMS41LDAuOC0zLjMsMS4xLTQuOSwwLjhjLTEuNi0wLjItMy4yLTEtNC40LTIuMQoJYy0wLjQtMC4zLTAuNC0wLjktMC4xLTEuMmMwLjMtMC40LDAuOS0wLjQsMS4yLTAuMWwwLDBjMSwwLjcsMi4yLDEuMSwzLjQsMS4xczIuMy0wLjMsMy4zLTFjMC45LTAuNiwxLjYtMS41LDItMi42CgljMC4zLTAuOSwwLjQtMS44LDAuMi0yLjhoLTIuNGMtMC40LDAtMC43LTAuMy0wLjctMC43YzAtMC4yLDAuMS0wLjMsMC4yLTAuNGw0LjQtNC40YzAuMy0wLjMsMC43LTAuMywwLjksMEwyMiw5LjgKCWMwLjMsMC4zLDAuNCwwLjYsMC4zLDAuOVMyMiwxMSwyMS44LDExeiIvPgo8L3N2Zz4K")
 	blocksMedia.set("green-flag.svg","data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9ImdyZWVuZmxhZyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDI0IDI0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNCAyNDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiM0NTk5M0Q7fQoJLnN0MXtmaWxsOiM0Q0JGNTY7fQo8L3N0eWxlPgo8dGl0bGU+Z3JlZW5mbGFnPC90aXRsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTIwLjgsMy43Yy0wLjQtMC4yLTAuOS0wLjEtMS4yLDAuMmMtMiwxLjYtNC44LDEuNi02LjgsMGMtMi4zLTEuOS01LjYtMi4zLTguMy0xVjIuNWMwLTAuNi0wLjUtMS0xLTEKCXMtMSwwLjQtMSwxdjE4LjhjMCwwLjUsMC41LDEsMSwxaDAuMWMwLjUsMCwxLTAuNSwxLTF2LTYuNGMxLTAuNywyLjEtMS4yLDMuNC0xLjNjMS4yLDAsMi40LDAuNCwzLjQsMS4yYzIuOSwyLjMsNywyLjMsOS44LDAKCWMwLjMtMC4yLDAuNC0wLjUsMC40LTAuOVY0LjdDMjEuNiw0LjIsMjEuMywzLjgsMjAuOCwzLjd6IE0yMC41LDEzLjlDMjAuNSwxMy45LDIwLjUsMTMuOSwyMC41LDEzLjlDMTgsMTYsMTQuNCwxNiwxMS45LDE0CgljLTEuMS0wLjktMi41LTEuNC00LTEuNGMtMS4yLDAuMS0yLjMsMC41LTMuNCwxLjFWNEM3LDIuNiwxMCwyLjksMTIuMiw0LjZjMi40LDEuOSw1LjcsMS45LDguMSwwYzAuMSwwLDAuMSwwLDAuMiwwCgljMCwwLDAuMSwwLjEsMC4xLDAuMUwyMC41LDEzLjl6Ii8+CjxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0yMC42LDQuOGwtMC4xLDkuMWMwLDAsMCwwLjEsMCwwLjFjLTIuNSwyLTYuMSwyLTguNiwwYy0xLjEtMC45LTIuNS0xLjQtNC0xLjRjLTEuMiwwLjEtMi4zLDAuNS0zLjQsMS4xVjQKCUM3LDIuNiwxMCwyLjksMTIuMiw0LjZjMi40LDEuOSw1LjcsMS45LDguMSwwYzAuMSwwLDAuMSwwLDAuMiwwQzIwLjUsNC43LDIwLjYsNC43LDIwLjYsNC44eiIvPgo8L3N2Zz4K")
@@ -11,14 +11,14 @@ chrome.extension.onMessage.addListener(
 	blocksMedia.set("dropdown-arrow.svg","data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=")
 
 
-        let svg = document.createElement('svg')
-        svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
-        svg.setAttribute('xmlns:html', 'http://www.w3.org/1999/xhtml')
-        svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-        svg.setAttribute('version', '1.1')
+    let svg = document.createElement('svg')
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    svg.setAttribute('xmlns:html', 'http://www.w3.org/1999/xhtml')
+    svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    svg.setAttribute('version', '1.1')
 
-        let style = document.createElement('style')
-        style.innerHTML =
+    let style = document.createElement('style')
+    style.innerHTML =
 `
 .blocklyText {
     fill: #fff;
@@ -33,47 +33,46 @@ chrome.extension.onMessage.addListener(
     fill: #fff !important;
 }
 `
-        if (request.command === 'export1') {
-            let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
-            if (!svgchild) alert('Click on the blocks you want to export!')
-            svgchild = svgchild.cloneNode(true)
-            let dataShapes = svgchild.getAttribute('data-shapes')
-            svgchild.setAttribute('transform', `translate(0,${dataShapes === 'hat' ? '18' : '0'})`)
-            svg.append(style)
-            svg.append(svgchild)
+    if (request.command === 'export1') {
+        let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
+        if (!svgchild) alert('Click on the blocks you want to export!')
+        svgchild = svgchild.cloneNode(true)
+        let dataShapes = svgchild.getAttribute('data-shapes')
+        svgchild.setAttribute('transform', `translate(0,${dataShapes === 'hat' ? '18' : '0'})`)
+        svg.append(style)
+        svg.append(svgchild)
+    } else {
+        let svgchild = document.querySelector('svg.blocklySvg g.blocklyBlockCanvas')
+        svgchild = svgchild.cloneNode(true)
 
-        } else {
-            let svgchild = document.querySelector('svg.blocklySvg g.blocklyBlockCanvas')
-            svgchild = svgchild.cloneNode(true)
-
-            let xArr = []
-            let yArr = []
-            svgchild.childNodes.forEach(g => {
-                let x = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[1] || 0
-                let y = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[2] || 0
-                xArr.push(x)
-                yArr.push(y)
-            })
-
-            svgchild.setAttribute('transform', `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18})`)
-            svg.append(style)
-            svg.append(svgchild)
-        }
-        // 处理 nbsp 空格
-        let texts = Array.from(svg.getElementsByTagName('text'))
-        texts.forEach(text => {
-            text.innerHTML = text.innerHTML.replace(/&nbsp;/, ' ')
+        let xArr = []
+        let yArr = []
+        svgchild.childNodes.forEach(g => {
+            let x = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[1] || 0
+            let y = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[2] || 0
+            xArr.push(x)
+            yArr.push(y)
         })
-        // 处理image 路径
-        let images = Array.from(svg.getElementsByTagName('image'))
-        images.forEach(item => {
-			      item.setAttribute('xlink:href', blocksMedia.get(item.getAttribute('xlink:href').substring(item.getAttribute('xlink:href').lastIndexOf('/')+1)))
-        })
-        let tmp = document.createElement('div')
-        tmp.appendChild(svg);
 
-        exportData(tmp.innerHTML)
-        sendMessage({command: 'ok'})
+        svgchild.setAttribute('transform', `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18})`)
+        svg.append(style)
+        svg.append(svgchild)
+    }
+    // 处理 nbsp 空格
+    let texts = Array.from(svg.getElementsByTagName('text'))
+    texts.forEach(text => {
+        text.innerHTML = text.innerHTML.replace(/&nbsp;/, ' ')
+    })
+    // 处理image 路径
+    let images = Array.from(svg.getElementsByTagName('image'))
+    images.forEach(item => {
+        item.setAttribute('xlink:href', blocksMedia.get(item.getAttribute('xlink:href').substring(item.getAttribute('xlink:href').lastIndexOf('/')+1)))
+    })
+    let tmp = document.createElement('div')
+    tmp.appendChild(svg);
+
+    exportData(tmp.innerHTML)
+    sendMessage({command: 'ok'})
 });
 
 function exportData(text) {
