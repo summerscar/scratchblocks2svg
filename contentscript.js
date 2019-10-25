@@ -61,12 +61,23 @@ chrome.extension.onMessage.addListener(
     // 处理 nbsp 空格
     let texts = Array.from(svg.getElementsByTagName('text'))
     texts.forEach(text => {
-        text.innerHTML = text.innerHTML.replace(/&nbsp;/, ' ')
+        text.innerHTML = text.innerHTML.replace(/&nbsp;/g, ' ')
     })
     // 处理image 路径
     let images = Array.from(svg.getElementsByTagName('image'))
+    let scratchURL = window.location.origin
+
     images.forEach(item => {
-        item.setAttribute('xlink:href', blocksMedia.get(item.getAttribute('xlink:href').substring(item.getAttribute('xlink:href').lastIndexOf('/')+1)))
+        let builtinSvgData = blocksMedia.get(item.getAttribute('xlink:href').substring(item.getAttribute('xlink:href').lastIndexOf('/')+1))
+        if (builtinSvgData) {   // 替换插件预置的svg数据（官方）
+            item.setAttribute('xlink:href', builtinSvgData)
+        } else if (item.getAttribute('xlink:href').indexOf('/static/') === 0) {    // 替换为第三方 链接形式
+            item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(0))
+        } else if (item.getAttribute('xlink:href').indexOf('./static/') === 0) {
+            item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(1))
+        } else if (item.getAttribute('xlink:href').indexOf('static/') === 0) {
+            item.setAttribute('xlink:href', scratchURL + '/' + item.getAttribute('xlink:href'))
+        }
     })
     let tmp = document.createElement('div')
     tmp.appendChild(svg);
