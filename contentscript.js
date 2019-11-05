@@ -1,7 +1,7 @@
 chrome.extension.onMessage.addListener(
     function(request, sender, sendMessage) {
     console.log(request)
-
+    let isExportPNG = request.command === 'export3' || request.command === 'export4'
 	// blocks-media as base64 for svg inline image
 	let blocksMedia = new Map()
 	blocksMedia.set("repeat.svg","data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9InJlcGVhdCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDI0IDI0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNCAyNDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiNDRjhCMTc7fQoJLnN0MXtmaWxsOiNGRkZGRkY7fQo8L3N0eWxlPgo8dGl0bGU+cmVwZWF0PC90aXRsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTIzLjMsMTFjLTAuMywwLjYtMC45LDEtMS41LDFoLTEuNmMtMC4xLDEuMy0wLjUsMi41LTEuMSwzLjZjLTAuOSwxLjctMi4zLDMuMi00LjEsNC4xCgljLTEuNywwLjktMy42LDEuMi01LjUsMC45Yy0xLjgtMC4zLTMuNS0xLjEtNC45LTIuM2MtMC43LTAuNy0wLjctMS45LDAtMi42YzAuNi0wLjYsMS42LTAuNywyLjMtMC4ySDdjMC45LDAuNiwxLjksMC45LDIuOSwwLjkKCXMxLjktMC4zLDIuNy0wLjljMS4xLTAuOCwxLjgtMi4xLDEuOC0zLjVoLTEuNWMtMC45LDAtMS43LTAuNy0xLjctMS43YzAtMC40LDAuMi0wLjksMC41LTEuMmw0LjQtNC40YzAuNy0wLjYsMS43LTAuNiwyLjQsMEwyMyw5LjIKCUMyMy41LDkuNywyMy42LDEwLjQsMjMuMywxMXoiLz4KPHBhdGggY2xhc3M9InN0MSIgZD0iTTIxLjgsMTFoLTIuNmMwLDEuNS0wLjMsMi45LTEsNC4yYy0wLjgsMS42LTIuMSwyLjgtMy43LDMuNmMtMS41LDAuOC0zLjMsMS4xLTQuOSwwLjhjLTEuNi0wLjItMy4yLTEtNC40LTIuMQoJYy0wLjQtMC4zLTAuNC0wLjktMC4xLTEuMmMwLjMtMC40LDAuOS0wLjQsMS4yLTAuMWwwLDBjMSwwLjcsMi4yLDEuMSwzLjQsMS4xczIuMy0wLjMsMy4zLTFjMC45LTAuNiwxLjYtMS41LDItMi42CgljMC4zLTAuOSwwLjQtMS44LDAuMi0yLjhoLTIuNGMtMC40LDAtMC43LTAuMy0wLjctMC43YzAtMC4yLDAuMS0wLjMsMC4yLTAuNGw0LjQtNC40YzAuMy0wLjMsMC43LTAuMywwLjksMEwyMiw5LjgKCWMwLjMsMC4zLDAuNCwwLjYsMC4zLDAuOVMyMiwxMSwyMS44LDExeiIvPgo8L3N2Zz4K")
@@ -33,30 +33,10 @@ chrome.extension.onMessage.addListener(
     fill: #fff !important;
 }
 `
-    if (request.command === 'export1') {
-        let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
-        if (!svgchild) alert('Click on the blocks you want to export!')
-        svgchild = svgchild.cloneNode(true)
-        let dataShapes = svgchild.getAttribute('data-shapes')
-        svgchild.setAttribute('transform', `translate(0,${dataShapes === 'hat' ? '18' : '0'})`)
-        svg.append(style)
-        svg.append(svgchild)
+    if (request.command === 'export1' || request.command === 'export3') {
+        svg = selectedBlocks(svg, style, isExportPNG)
     } else {
-        let svgchild = document.querySelector('svg.blocklySvg g.blocklyBlockCanvas')
-        svgchild = svgchild.cloneNode(true)
-
-        let xArr = []
-        let yArr = []
-        svgchild.childNodes.forEach(g => {
-            let x = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[1] || 0
-            let y = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[2] || 0
-            xArr.push(x)
-            yArr.push(y)
-        })
-
-        svgchild.setAttribute('transform', `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18})`)
-        svg.append(style)
-        svg.append(svgchild)
+        svg = allBlocks(svg, style, isExportPNG)
     }
     // 处理 nbsp 空格
     let texts = Array.from(svg.getElementsByTagName('text'))
@@ -81,10 +61,43 @@ chrome.extension.onMessage.addListener(
     })
     let tmp = document.createElement('div')
     tmp.appendChild(svg);
-
-    exportData(tmp.innerHTML)
+    if (request.command === 'export1' || request.command === 'export2') {
+        exportData(tmp.innerHTML)
+    } else {
+        exportPNG(svg);
+    }
     sendMessage({command: 'ok'})
 });
+
+function selectedBlocks (svg, style, isExportPNG) {
+    let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
+    if (!svgchild) alert('Click on the blocks you want to export!')
+    svgchild = svgchild.cloneNode(true)
+    let dataShapes = svgchild.getAttribute('data-shapes')
+    svgchild.setAttribute('transform', `translate(0,${dataShapes === 'hat' ? '18' : '0'}) ${isExportPNG ? 'scale(2)' : ''}`)
+    svg.append(style)
+    svg.append(svgchild)
+    return svg
+}
+
+function allBlocks(svg, style, isExportPNG) {
+    let svgchild = document.querySelector('svg.blocklySvg g.blocklyBlockCanvas')
+    svgchild = svgchild.cloneNode(true)
+
+    let xArr = []
+    let yArr = []
+    svgchild.childNodes.forEach(g => {
+        let x = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[1] || 0
+        let y = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[2] || 0
+        xArr.push(x * (isExportPNG ? 2 : 1))
+        yArr.push(y * (isExportPNG ? 2 : 1))
+    })
+
+    svgchild.setAttribute('transform', `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + (18 * (isExportPNG ? 2 : 1))}) ${isExportPNG ? 'scale(2)' : ''}`)
+    svg.append(style)
+    svg.append(svgchild)
+    return svg
+}
 
 function exportData(text) {
     const saveLink = document.createElement('a')
@@ -97,8 +110,41 @@ function exportData(text) {
     // File name: project-DATE-TIME
     const date = new Date()
     const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`
-    saveLink.download = `block.${timestamp}.svg`
+    saveLink.download = `block_${timestamp}.svg`
     saveLink.click()
     window.URL.revokeObjectURL(url)
     document.body.removeChild(saveLink)
 }
+
+function exportPNG(svg) {
+    let widthAndHeight = prompt('PNG width/height (px):', '600/600')
+    let width = widthAndHeight.split('/')[0]
+    let height = widthAndHeight.split('/')[1]
+
+    svg.setAttribute('width', width + 'px')
+    svg.setAttribute('height', height + 'px')
+
+    let div = document.createElement('div')
+    div.appendChild(svg)
+    let canvas = document.createElement( "canvas" );
+    let ctx = canvas.getContext( "2d" );
+
+    let img = document.createElement( "img" );
+
+    img.setAttribute( "src", "data:image/svg+xml;base64," + btoa( unescape(encodeURIComponent(div.innerHTML)) ) );
+    img.onload = function() {
+        canvas.height = img.height
+        canvas.width = img.width
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        // Now is done
+        let dataURL = canvas.toDataURL( "image/png" );
+        let link = document.createElement('a');
+        const date = new Date()
+        const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`
+    
+        link.download = `block_${timestamp}.png`;
+        link.href = dataURL
+        link.click();
+    }
+}
+
