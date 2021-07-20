@@ -117,34 +117,37 @@ function exportData(text) {
 }
 
 function exportPNG(svg) {
-    let widthAndHeight = prompt('PNG width/height (px):', '600/600')
-    let width = widthAndHeight.split('/')[0]
-    let height = widthAndHeight.split('/')[1]
+    const div = document.createElement("div");
+    div.appendChild(svg);
 
-    svg.setAttribute('width', width + 'px')
-    svg.setAttribute('height', height + 'px')
+    const iframe = document.createElement("iframe");
+    // iframe.style.display = "none"
+    document.body.append(iframe);
+    iframe.contentDocument.write(div.innerHTML);
+    let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
+    height = height + 20 * 2; //  hat block height restore
+    svg.setAttribute("width", width + "px");
+    svg.setAttribute("height", height + "px");
 
-    let div = document.createElement('div')
-    div.appendChild(svg)
-    let canvas = document.createElement( "canvas" );
-    let ctx = canvas.getContext( "2d" );
+    let canvas = document.createElement("canvas");
+    let ctx = canvas.getContext("2d");
 
-    let img = document.createElement( "img" );
+    let img = document.createElement("img");
 
-    img.setAttribute( "src", "data:image/svg+xml;base64," + btoa( unescape(encodeURIComponent(div.innerHTML)) ) );
-    img.onload = function() {
-        canvas.height = img.height
-        canvas.width = img.width
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-        // Now is done
-        let dataURL = canvas.toDataURL( "image/png" );
-        let link = document.createElement('a');
-        const date = new Date()
-        const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`
-    
-        link.download = `block_${timestamp}.png`;
-        link.href = dataURL
-        link.click();
-    }
+    img.setAttribute("src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(div.innerHTML))));
+    img.onload = function () {
+      canvas.height = img.height;
+      canvas.width = img.width;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+      // Now is done
+      let dataURL = canvas.toDataURL("image/png");
+      let link = document.createElement("a");
+      const date = new Date();
+      const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
+
+      link.download = `block_${timestamp}.png`;
+      link.href = dataURL;
+      link.click();
+      iframe.remove();
+    };
 }
-
